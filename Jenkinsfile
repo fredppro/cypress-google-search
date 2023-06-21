@@ -2,21 +2,6 @@ pipeline {
       agent any
 
       tools {nodejs "NodeJS"}
-
-
-      parameters{
-          string(name: 'SPEC', defaultValue:"cypress/e2e/1-getting-started/todo.cy.js", description: "Enter the cypress script path that you want to execute")
-          choice(name: 'BROWSER', choices:['electron', 'chrome', 'edge', 'firefox'], description: "Select the browser to be used in your cypress tests")
-          booleanParam(name: 'skip_build', defaultValue: true, description: 'Set to true to skip the build stage')
-          booleanParam(name: 'skip_test', defaultValue: true, description: 'Set to true to skip the test stage')
-          booleanParam(name: 'skip_sonar', defaultValue: true, description: 'Set to true to skip the SonarQube stage')
-          booleanParam(name: 'skip_jmeter', defaultValue: false, description: 'Set to true to skip the SonarQube stage')
-      }
-
-      options {
-              ansiColor('xterm')
-      }
-
      
       stages {
         stage('Build/Deploy app to staging') {
