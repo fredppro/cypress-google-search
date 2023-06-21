@@ -16,7 +16,6 @@ pipeline {
                       scannerHome = tool 'sonar-scanner';
                  }
             sh "${scannerHome}/bin/sonar-scanner"
-            }
           }
         }
 
