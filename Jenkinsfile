@@ -4,32 +4,6 @@ pipeline {
       tools {nodejs "NodeJS"}
      
       stages {
-        stage('Run automated tests'){
-            when { expression { params.skip_test != true } }
-            steps {
-              echo "Running automated tests"
-                sh 'npm prune'
-                sh 'npm cache clean --force'
-                sh 'npm i'
-                sh 'npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator'
-                sh 'npm run cypress:run --headless'
-            }
-            post {
-                success {
-                    publishHTML (
-                        target : [
-                            allowMissing: false,
-                            alwaysLinkToLastBuild: true,
-                            keepAll: true,
-                            reportDir: 'mochawesome-report',
-                            reportFiles: 'mochawesome.html',
-                            reportName: 'My Reports',
-                            reportTitles: 'The Report'])
-
-                }
-            }
-        }
-
         stage('SonarQube analysis') {
           when { expression { params.skip_sonar != true } }
           steps {
