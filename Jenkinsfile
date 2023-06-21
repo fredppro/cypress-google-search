@@ -5,14 +5,12 @@ pipeline {
      
       stages {
         stage('Run automated tests'){
-            when { expression { params.skip_test != true } }
             steps {
               echo "Running automated tests" 
             }
         }
 
         stage('SonarQube analysis') {
-          when { expression { params.skip_sonar != true } }
           steps {
             script {
                       scannerHome = tool 'sonar-scanner';
@@ -24,7 +22,6 @@ pipeline {
         }
 
         stage('JMeter Test') {
-            when { expression { params.skip_jmeter != true } } 
             steps {
                 script {
                     // Path to the JMeter installation directory
