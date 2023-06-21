@@ -33,7 +33,7 @@ npx cypress open
 ```
 
 ## CI
-
+a
 See [cypress-io/github-action](https://github.com/cypress-io/github-action).
 
 ## License
