@@ -4,6 +4,13 @@ pipeline {
       tools {nodejs "NodeJS"}
      
       stages {
+        stage('Run automated tests'){
+            when { expression { params.skip_test != true } }
+            steps {
+              echo "Running automated tests" 
+            }
+        }
+
         stage('SonarQube analysis') {
           when { expression { params.skip_sonar != true } }
           steps {
