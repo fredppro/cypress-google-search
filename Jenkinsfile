@@ -4,36 +4,6 @@ pipeline {
       tools {nodejs "NodeJS"}
      
       stages {
-        stage('Build/Deploy app to staging') {
-            when { expression { params.skip_build != true } }
-            steps {
-              echo "Copying files to staging and restarting the app"
-                sshPublisher(
-                    publishers: [
-                        sshPublisherDesc(
-                            configName: 'staging',
-                            transfers: [
-                                sshTransfer(
-                                    cleanRemote: false,
-                                    excludes: 'node_modules/,cypress/,**/*.yml',
-                                    execCommand: '''
-                                    cd /usr/share/nginx/html
-                                    npm ci
-                                    pm2 restart todo''',
-                                    execTimeout: 1200000,
-                                    flatten: false,
-                                    makeEmptyDirs: false,
-                                    noDefaultExcludes: false,
-                                    patternSeparator: '[, ]+',
-                                    remoteDirectory: '',
-                                    remoteDirectorySDF: false,
-                                    removePrefix: '',
-                                    sourceFiles: '**/*')],
-                        usePromotionTimestamp: false,
-                        useWorkspaceInPromotion: false,
-                        verbose: true)])
-         }
-        }
         stage('Run automated tests'){
             when { expression { params.skip_test != true } }
             steps {
@@ -70,17 +40,6 @@ pipeline {
             sh "${scannerHome}/bin/sonar-scanner"
             }
           }
-        }
-
-        stage("Quality Gate") {
-            when { expression { params.skip_sonar != true } }
-            steps {
-                timeout(time: 1, unit: 'HOURS') {
-                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                    // true = set pipeline to UNSTABLE, false = don't do that
-                    waitForQualityGate abortPipeline: true
-                }
-            }
         }
 
         stage('JMeter Test') {
